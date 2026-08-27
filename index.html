@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minerals & Co. Jewelery — Clearance Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#181716;
+    --ink-soft:#54504b;
+    --line:#e9e6e0;
+    --line-strong:#d8d4cc;
+    --stone:#8b9788;
+    --stone-deep:#5f6b5c;
+    --paper:#faf9f7;
+    --error:#b4483a;
+    --radius:2px;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-font-smoothing:antialiased;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    font-size:15px;
+    line-height:1.5;
+  }
+  ::selection{ background:var(--stone); color:#fff; }
+
+  a{ color:inherit; }
+
+  .serif{ font-family:'Fraunces', serif; }
+
+  :focus-visible{
+    outline:2px solid var(--ink);
+    outline-offset:3px;
+  }
+
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:26px 5vw 24px;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    letter-spacing:0.01em;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .brand .amp{ color:var(--stone-deep); font-style:italic; }
+  .brand-sub{
+    font-size:10.5px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-family:'Inter',sans-serif;
+    border-left:1px solid var(--line-strong);
+    padding-left:12px;
+    margin-left:2px;
+  }
+  .header-right{
+    font-size:11.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- Layout ---------- */
+  main{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 5vw;
+  }
+  .stage{
+    max-width:680px;
+    margin:0 auto;
+  }
+
+  /* ---------- Info column ---------- */
+  .info{
+    padding:56px 0 80px;
+  }
+  @media (max-width:860px){
+    .info{ padding:32px 0 60px; }
+  }
+
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--stone-deep);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:400;
+    font-size:clamp(30px,3.4vw,40px);
+    line-height:1.08;
+    margin:0 0 14px;
+    max-width:16ch;
+  }
+  .price-row{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .price{ font-size:20px; font-weight:500; }
+  .price-was{ font-size:14px; color:var(--ink-soft); text-decoration:line-through; }
+  .price-off{
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--stone-deep);
+    border:1px solid var(--line-strong);
+    padding:3px 7px;
+  }
+
+  .desc{
+    color:var(--ink-soft);
+    max-width:46ch;
+    margin-bottom:34px;
+  }
+  .desc p{ margin:0 0 12px; }
+
+  /* ---------- Variant picker ---------- */
+  .variant-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:12px;
+  }
+  .variant-label{ font-size:12.5px; letter-spacing:0.04em; font-weight:500; }
+  .variant-hint{ font-size:12px; color:var(--ink-soft); }
+
+  .variant-grid{
+    display:grid;
+    grid-template-columns:repeat(10, 1fr);
+    gap:6px;
+    margin-bottom:8px;
+  }
+  @media (max-width:540px){
+    .variant-grid{ grid-template-columns:repeat(7, 1fr); }
+  }
+
+  .chip{
+    aspect-ratio:1;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    position:relative;
+    padding:0;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .chip:hover{ border-color:var(--ink); transform:translateY(-1px); }
+  .chip .stone-dot{
+    width:100%;
+    height:100%;
+    position:absolute;
+    inset:0;
+    opacity:0.9;
+  }
+  .chip .num{
+    position:relative;
+    font-size:9.5px;
+    color:#fff;
+    mix-blend-mode:difference;
+    padding-bottom:3px;
+    font-weight:500;
+    letter-spacing:0.01em;
+  }
+  .chip.selected{
+    border-color:var(--ink);
+    box-shadow:0 0 0 1px var(--ink);
+  }
+  .chip.sold{
+    opacity:0.32;
+    cursor:not-allowed;
+  }
+  .chip.sold::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:repeating-linear-gradient(135deg, transparent, transparent 3px, rgba(24,23,22,0.5) 3px, rgba(24,23,22,0.5) 4px);
+  }
+
+  .stock-note{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-bottom:30px;
+  }
+  .stock-note strong{ color:var(--ink); font-weight:500; }
+
+  /* ---------- Qty + CTA ---------- */
+  .purchase-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .qty{
+    display:flex;
+    align-items:center;
+    border:1px solid var(--line-strong);
+    height:50px;
+  }
+  .qty button{
+    width:38px; height:100%;
+    background:none; border:none;
+    font-size:16px;
+    color:var(--ink);
+  }
+  .qty button:hover{ background:var(--paper); }
+  .qty span{ width:32px; text-align:center; font-size:14px; }
+
+  .cta{
+    flex:1;
+    height:50px;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    font-size:13px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    transition:background .15s ease;
+  }
+  .cta:hover{ background:#000; }
+  .cta:disabled{ background:var(--line-strong); color:var(--ink-soft); cursor:not-allowed; }
+
+  .meta-list{
+    margin-top:36px;
+    border-top:1px solid var(--line);
+    padding-top:22px;
+    display:grid;
+    gap:11px;
+  }
+  .meta-list div{
+    display:flex;
+    justify-content:space-between;
+    font-size:12.5px;
+  }
+  .meta-list dt{ color:var(--ink-soft); }
+  .meta-list dd{ margin:0; }
+
+  /* ---------- Checkout overlay ---------- */
+  .checkout-veil{
+    position:fixed; inset:0;
+    background:rgba(24,23,22,0.28);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:20;
+  }
+  .checkout-veil.open{ opacity:1; pointer-events:auto; }
+
+  .checkout-panel{
+    position:fixed;
+    top:0; right:0;
+    height:100%;
+    width:min(480px, 100vw);
+    background:#fff;
+    border-left:1px solid var(--line);
+    transform:translateX(100%);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1);
+    z-index:21;
+    display:flex;
+    flex-direction:column;
+  }
+  .checkout-panel.open{ transform:translateX(0); }
+
+  .co-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 28px;
+    border-bottom:1px solid var(--line);
+  }
+  .co-head h2{ font-family:'Fraunces',serif; font-weight:400; font-size:20px; margin:0; }
+  .co-close{
+    background:none; border:none;
+    font-size:20px; line-height:1;
+    color:var(--ink-soft);
+    width:32px; height:32px;
+  }
+  .co-close:hover{ color:var(--ink); }
+
+  .co-body{
+    padding:26px 28px 40px;
+    overflow-y:auto;
+    flex:1;
+  }
+
+  .co-order{
+    display:flex; gap:14px;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:24px;
+  }
+  .co-order .swatch{ width:56px; height:56px; border:1px solid var(--line-strong); flex-shrink:0; position:relative; }
+  .co-order .swatch .stone-dot{ position:absolute; inset:0; }
+  .co-order-info{ flex:1; }
+  .co-order-info .name{ font-size:13.5px; font-weight:500; margin-bottom:2px; }
+  .co-order-info .sub{ font-size:12px; color:var(--ink-soft); }
+  .co-order-price{ font-size:13.5px; font-weight:500; white-space:nowrap; }
+
+  .co-totals{ font-size:13px; display:grid; gap:8px; margin-bottom:30px; }
+  .co-totals div{ display:flex; justify-content:space-between; color:var(--ink-soft); }
+  .co-totals div.grand{ color:var(--ink); font-weight:500; font-size:14.5px; padding-top:8px; border-top:1px solid var(--line); }
+
+  fieldset{ border:none; padding:0; margin:0 0 26px; }
+  legend{
+    font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--stone-deep); margin-bottom:14px; padding:0;
+  }
+  .field-row{ display:flex; gap:10px; }
+  .field{ margin-bottom:12px; flex:1; }
+  .field label{
+    display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:5px;
+  }
+  .field input, .field select{
+    width:100%;
+    height:42px;
+    border:1px solid var(--line-strong);
+    background:#fff;
+    padding:0 12px;
+    font-size:13.5px;
+    font-family:inherit;
+    color:var(--ink);
+  }
+  .field input:focus, .field select:focus{ border-color:var(--ink); }
+
+  .co-submit{
+    width:100%;
+    height:50px;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    font-size:13px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-top:6px;
+  }
+  .co-submit:hover{ background:#000; }
+
+  .co-secure{
+    text-align:center;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:12px;
+    letter-spacing:0.02em;
+  }
+
+  /* ---------- Confirmation ---------- */
+  .co-confirm{ text-align:center; padding:60px 10px 20px; }
+  .co-confirm .mark{
+    width:52px; height:52px; margin:0 auto 22px;
+    border:1px solid var(--ink); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .co-confirm h2{ font-family:'Fraunces',serif; font-weight:400; font-size:22px; margin:0 0 10px; }
+  .co-confirm p{ color:var(--ink-soft); font-size:13.5px; max-width:32ch; margin:0 auto 4px; }
+  .co-confirm .order-num{ font-size:12px; letter-spacing:0.06em; color:var(--ink-soft); margin-top:18px; }
+  .co-confirm .order-num strong{ color:var(--ink); }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 5vw 40px;
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:0.04em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    Minerals <span class="amp">&amp;</span> Co.
+    <span class="brand-sub">Jewelery</span>
+  </div>
+  <div class="header-right">Clearance · Final Sale</div>
+</header>
+
+<main>
+  <div class="stage">
+    <!-- Info -->
+    <div class="info">
+      <div class="eyebrow">Minerals &amp; Co. Jewelery</div>
+      <h1>Single Listing — Clearance Collection</h1>
+
+      <div class="price-row">
+        <span class="price">$48</span>
+        <span class="price-was">$96</span>
+        <span class="price-off">50% off</span>
+      </div>
+
+      <div class="desc">
+        <p>One listing, fifty stones — each pendant set with a raw mineral pulled from end-of-run studio stock. No two are quite alike; the variation is the point.</p>
+        <p>Sold as-is, one piece per variant. Once a number sells, it's gone for good.</p>
+      </div>
+
+      <div class="variant-head">
+        <span class="variant-label">Variant — <span id="selLabel">choose a stone</span></span>
+        <span class="variant-hint" id="stockCount">50 available</span>
+      </div>
+
+      <div class="variant-grid" id="variantGrid"></div>
+
+      <div class="stock-note">Currently viewing <strong id="viewingLabel">—</strong>. Sold pieces are shown crossed out.</div>
+
+      <div class="purchase-row">
+        <div class="qty">
+          <button type="button" id="qtyMinus" aria-label="Decrease quantity">–</button>
+          <span id="qtyVal">1</span>
+          <button type="button" id="qtyPlus" aria-label="Increase quantity">+</button>
+        </div>
+      </div>
+      <p class="stock-note" style="margin-top:-6px;">Tap a variant above to check out with that stone.</p>
+
+      <dl class="meta-list">
+        <div><dt>Material</dt><dd>Raw mineral, brass setting</dd></div>
+        <div><dt>Origin</dt><dd>Sourced in small batches</dd></div>
+        <div><dt>Shipping</dt><dd>3–6 business days</dd></div>
+        <div><dt>Returns</dt><dd>Final sale — no returns</dd></div>
+      </dl>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>© 2026 Minerals &amp; Co. Jewelery</span>
+  <span>Clearance listing · A1–A50</span>
+</footer>
+
+<!-- Checkout overlay -->
+<div class="checkout-veil" id="veil"></div>
+<div class="checkout-panel" id="panel">
+  <div class="co-head">
+    <h2>Checkout</h2>
+    <button class="co-close" id="closeBtn" aria-label="Close checkout">×</button>
+  </div>
+  <div class="co-body" id="coBody">
+    <!-- Order summary -->
+    <div class="co-order">
+      <div class="swatch"><div class="stone-dot" id="coSwatch"></div></div>
+      <div class="co-order-info">
+        <div class="name">Single Listing — Clearance Collection</div>
+        <div class="sub">Variant <span id="coVariant">—</span> · Qty <span id="coQty">1</span></div>
+      </div>
+      <div class="co-order-price" id="coLinePrice">$48</div>
+    </div>
+
+    <div class="co-totals">
+      <div><span>Subtotal</span><span id="totSub">$48.00</span></div>
+      <div><span>Shipping</span><span id="totShip">$6.00</span></div>
+      <div class="grand"><span>Total</span><span id="totGrand">$54.00</span></div>
+    </div>
+
+    <form id="checkoutForm">
+      <fieldset>
+        <legend>Contact</legend>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required placeholder="you@example.com">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Shipping address</legend>
+        <div class="field">
+          <label for="fullname">Full name</label>
+          <input type="text" id="fullname" required placeholder="Jane Doe">
+        </div>
+        <div class="field">
+          <label for="address">Address</label>
+          <input type="text" id="address" required placeholder="Street and number">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="city">City</label>
+            <input type="text" id="city" required>
+          </div>
+          <div class="field">
+            <label for="zip">Postal code</label>
+            <input type="text" id="zip" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="country">Country</label>
+          <select id="country" required>
+            <option value="">Select country</option>
+            <option>Indonesia</option>
+            <option>United States</option>
+            <option>United Kingdom</option>
+            <option>Australia</option>
+            <option>Singapore</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Payment</legend>
+        <div class="field">
+          <label for="cardnum">Card number</label>
+          <input type="text" id="cardnum" required placeholder="0000 0000 0000 0000" maxlength="19">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="expiry">Expiry</label>
+            <input type="text" id="expiry" required placeholder="MM/YY" maxlength="5">
+          </div>
+          <div class="field">
+            <label for="cvc">CVC</label>
+            <input type="text" id="cvc" required placeholder="000" maxlength="4">
+          </div>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="co-submit">Pay $54.00</button>
+      <div class="co-secure">This is a design demo — no payment is processed.</div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ---- Stone palette: curated mineral tones, cycling with slight variation ----
+  var baseStones = [
+    ['#e7e2d8','#c9c0ab'], // quartz
+    ['#5b5750','#302d29'], // smoky
+    ['#e6c9c9','#c99a9a'], // rose quartz
+    ['#a692c4','#6c5590'], // amethyst
+    ['#d9b45f','#a8822f'], // citrine
+    ['#7c9b7e','#4c6a4e'], // jade
+    ['#2b2b2b','#0c0c0c'], // obsidian
+    ['#7fa9ad','#3f6c70'], // aquamarine
+    ['#c98a52','#8a5626'], // tigers eye
+    ['#b7c4d6','#8391a8']  // celestite
+  ];
+
+  var total = 50;
+  var soldSet = new Set([3,7,12,19,24,31,38,44,47]); // pre-sold for realism
+  var grid = document.getElementById('variantGrid');
+  var selected = null;
+
+  function stoneGradient(i){
+    var pair = baseStones[i % baseStones.length];
+    var angle = (i * 37) % 360;
+    return 'linear-gradient(' + angle + 'deg,' + pair[0] + ',' + pair[1] + ')';
+  }
+
+  for (var i = 1; i <= total; i++){
+    (function(i){
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip' + (soldSet.has(i) ? ' sold' : '');
+      chip.setAttribute('data-num', i);
+      chip.setAttribute('aria-label', 'Variant A' + i + (soldSet.has(i) ? ' (sold)' : ''));
+      if (soldSet.has(i)) chip.disabled = true;
+
+      var dot = document.createElement('div');
+      dot.className = 'stone-dot';
+      dot.style.background = stoneGradient(i);
+      chip.appendChild(dot);
+
+      var num = document.createElement('span');
+      num.className = 'num';
+      num.textContent = 'A' + i;
+      chip.appendChild(num);
+
+      chip.addEventListener('click', function(){
+        if (soldSet.has(i)) return;
+        if (selected) selected.classList.remove('selected');
+        selected = chip;
+        chip.classList.add('selected');
+        document.getElementById('selLabel').textContent = 'A' + i + ' selected';
+        document.getElementById('viewingLabel').textContent = 'A' + i;
+
+        openCheckout(i);
+      });
+
+      grid.appendChild(chip);
+    })(i);
+  }
+
+  document.getElementById('stockCount').textContent = (total - soldSet.size) + ' available';
+
+  // ---- Quantity ----
+  var qty = 1;
+  var qtyVal = document.getElementById('qtyVal');
+  document.getElementById('qtyMinus').addEventListener('click', function(){
+    if (qty > 1){ qty--; qtyVal.textContent = qty; }
+  });
+  document.getElementById('qtyPlus').addEventListener('click', function(){
+    if (qty < 3){ qty++; qtyVal.textContent = qty; }
+  });
+
+  // ---- Checkout panel ----
+  var veil = document.getElementById('veil');
+  var panel = document.getElementById('panel');
+  var unitPrice = 48;
+
+  function openCheckout(num){
+    document.getElementById('coVariant').textContent = 'A' + num;
+    document.getElementById('coQty').textContent = qty;
+    document.getElementById('coSwatch').style.background = stoneGradient(parseInt(num,10));
+    var sub = unitPrice * qty;
+    var ship = 6;
+    var grand = sub + ship;
+    document.getElementById('coLinePrice').textContent = '$' + sub.toFixed(2).replace('.00','');
+    document.getElementById('totSub').textContent = '$' + sub.toFixed(2);
+    document.getElementById('totShip').textContent = '$' + ship.toFixed(2);
+    document.getElementById('totGrand').textContent = '$' + grand.toFixed(2);
+    document.querySelector('.co-submit').textContent = 'Pay $' + grand.toFixed(2);
+
+    veil.classList.add('open');
+    panel.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePanel(){
+    veil.classList.remove('open');
+    panel.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('closeBtn').addEventListener('click', closePanel);
+  veil.addEventListener('click', closePanel);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closePanel();
+  });
+
+  // ---- Form submit -> confirmation ----
+  document.getElementById('checkoutForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var num = selected ? selected.getAttribute('data-num') : '—';
+    var orderNum = 'MC-' + Math.floor(100000 + Math.random()*899999);
+    document.getElementById('coBody').innerHTML =
+      '<div class="co-confirm">' +
+        '<div class="mark">&#10003;</div>' +
+        '<h2>Order confirmed</h2>' +
+        '<p>Your piece, variant A' + num + ', is being wrapped for shipping. A confirmation has been sent to your email.</p>' +
+        '<div class="order-num">Order <strong>' + orderNum + '</strong></div>' +
+      '</div>';
+  });
+})();
+</script>
+
+</body>
+</html>
