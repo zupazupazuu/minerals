@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minerals & Co. Jewelery — Clearance Collection</title>
+<title>Minerals & Co. Jewelery — Cuci Gudang</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -70,18 +70,12 @@
     padding-left:12px;
     margin-left:2px;
   }
-  .header-right{
-    font-size:11.5px;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color:var(--ink-soft);
-  }
 
   /* ---------- Layout ---------- */
   main{
     max-width:1180px;
     margin:0 auto;
-    padding:0 5vw;
+    padding:0 5vw 120px;
   }
   .stage{
     max-width:680px;
@@ -90,10 +84,10 @@
 
   /* ---------- Info column ---------- */
   .info{
-    padding:56px 0 80px;
+    padding:56px 0 60px;
   }
   @media (max-width:860px){
-    .info{ padding:32px 0 60px; }
+    .info{ padding:32px 0 40px; }
   }
 
   .eyebrow{
@@ -118,15 +112,7 @@
     margin-bottom:22px;
   }
   .price{ font-size:20px; font-weight:500; }
-  .price-was{ font-size:14px; color:var(--ink-soft); text-decoration:line-through; }
-  .price-off{
-    font-size:11px;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    color:var(--stone-deep);
-    border:1px solid var(--line-strong);
-    padding:3px 7px;
-  }
+  .price-note{ font-size:12.5px; color:var(--ink-soft); }
 
   .desc{
     color:var(--ink-soft);
@@ -176,16 +162,32 @@
   }
   .chip .num{
     position:relative;
-    font-size:9.5px;
+    font-size:9px;
     color:#fff;
-    mix-blend-mode:difference;
-    padding-bottom:3px;
+    background:rgba(24,23,22,0.72);
+    padding:1px 4px 2px;
+    margin-bottom:3px;
+    border-radius:2px;
     font-weight:500;
     letter-spacing:0.01em;
+    line-height:1.3;
   }
   .chip.selected{
     border-color:var(--ink);
     box-shadow:0 0 0 1px var(--ink);
+  }
+  .chip.selected::before{
+    content:"✓";
+    position:absolute;
+    top:3px; left:3px;
+    width:14px; height:14px;
+    background:var(--ink);
+    color:#fff;
+    font-size:9px;
+    line-height:14px;
+    text-align:center;
+    border-radius:50%;
+    z-index:2;
   }
   .chip.sold{
     opacity:0.32;
@@ -201,44 +203,9 @@
   .stock-note{
     font-size:11.5px;
     color:var(--ink-soft);
-    margin-bottom:30px;
+    margin-bottom:0;
   }
   .stock-note strong{ color:var(--ink); font-weight:500; }
-
-  /* ---------- Qty + CTA ---------- */
-  .purchase-row{
-    display:flex;
-    gap:10px;
-    margin-bottom:16px;
-  }
-  .qty{
-    display:flex;
-    align-items:center;
-    border:1px solid var(--line-strong);
-    height:50px;
-  }
-  .qty button{
-    width:38px; height:100%;
-    background:none; border:none;
-    font-size:16px;
-    color:var(--ink);
-  }
-  .qty button:hover{ background:var(--paper); }
-  .qty span{ width:32px; text-align:center; font-size:14px; }
-
-  .cta{
-    flex:1;
-    height:50px;
-    background:var(--ink);
-    color:#fff;
-    border:none;
-    font-size:13px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    transition:background .15s ease;
-  }
-  .cta:hover{ background:#000; }
-  .cta:disabled{ background:var(--line-strong); color:var(--ink-soft); cursor:not-allowed; }
 
   .meta-list{
     margin-top:36px;
@@ -254,6 +221,43 @@
   }
   .meta-list dt{ color:var(--ink-soft); }
   .meta-list dd{ margin:0; }
+
+  /* ---------- Sticky cart bar ---------- */
+  .cart-bar{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    background:#fff;
+    border-top:1px solid var(--line);
+    padding:14px 5vw;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform:translateY(100%);
+    transition:transform .25s ease;
+    z-index:15;
+  }
+  .cart-bar.show{ transform:translateY(0); }
+  .cart-bar-inner{
+    max-width:680px;
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .cart-bar-info{ flex:1; font-size:13px; }
+  .cart-bar-info strong{ font-weight:500; }
+  .cart-bar-info .sub{ color:var(--ink-soft); font-size:12px; }
+  .cart-bar-btn{
+    height:48px;
+    padding:0 26px;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    font-size:13px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+  .cart-bar-btn:hover{ background:#000; }
 
   /* ---------- Checkout overlay ---------- */
   .checkout-veil{
@@ -301,18 +305,27 @@
     flex:1;
   }
 
-  .co-order{
-    display:flex; gap:14px;
-    padding-bottom:22px;
+  .co-items{
+    display:grid;
+    gap:14px;
+    padding-bottom:20px;
     border-bottom:1px solid var(--line);
-    margin-bottom:24px;
+    margin-bottom:22px;
   }
-  .co-order .swatch{ width:56px; height:56px; border:1px solid var(--line-strong); flex-shrink:0; position:relative; }
-  .co-order .swatch .stone-dot{ position:absolute; inset:0; }
-  .co-order-info{ flex:1; }
-  .co-order-info .name{ font-size:13.5px; font-weight:500; margin-bottom:2px; }
-  .co-order-info .sub{ font-size:12px; color:var(--ink-soft); }
-  .co-order-price{ font-size:13.5px; font-weight:500; white-space:nowrap; }
+  .co-item{
+    display:flex; gap:14px; align-items:center;
+  }
+  .co-item .swatch{ width:48px; height:48px; border:1px solid var(--line-strong); flex-shrink:0; position:relative; }
+  .co-item .swatch .stone-dot{ position:absolute; inset:0; }
+  .co-item-info{ flex:1; }
+  .co-item-info .name{ font-size:13px; font-weight:500; }
+  .co-item-price{ font-size:13px; font-weight:500; white-space:nowrap; }
+  .co-item-remove{
+    background:none; border:none;
+    font-size:16px; color:var(--ink-soft);
+    width:24px; height:24px; flex-shrink:0;
+  }
+  .co-item-remove:hover{ color:var(--error); }
 
   .co-totals{ font-size:13px; display:grid; gap:8px; margin-bottom:30px; }
   .co-totals div{ display:flex; justify-content:space-between; color:var(--ink-soft); }
@@ -352,6 +365,7 @@
     margin-top:6px;
   }
   .co-submit:hover{ background:#000; }
+  .co-submit:disabled{ background:var(--line-strong); color:var(--ink-soft); cursor:not-allowed; }
 
   .co-secure{
     text-align:center;
@@ -359,6 +373,13 @@
     color:var(--ink-soft);
     margin-top:12px;
     letter-spacing:0.02em;
+  }
+
+  .co-empty{
+    text-align:center;
+    padding:60px 10px;
+    color:var(--ink-soft);
+    font-size:13.5px;
   }
 
   /* ---------- Confirmation ---------- */
@@ -395,148 +416,60 @@
     Minerals <span class="amp">&amp;</span> Co.
     <span class="brand-sub">Jewelery</span>
   </div>
-  <div class="header-right">Clearance · Final Sale</div>
 </header>
 
 <main>
   <div class="stage">
     <!-- Info -->
     <div class="info">
-      <div class="eyebrow">Minerals &amp; Co. Jewelery</div>
-      <h1>Single Listing — Clearance Collection</h1>
+      <h1>Cuci Gudang</h1>
 
       <div class="price-row">
-        <span class="price">$48</span>
-        <span class="price-was">$96</span>
-        <span class="price-off">50% off</span>
+        <span class="price">Rp 750.000</span>
+        <span class="price-note">/ pcs</span>
       </div>
 
       <div class="desc">
-        <p>One listing, fifty stones — each pendant set with a raw mineral pulled from end-of-run studio stock. No two are quite alike; the variation is the point.</p>
-        <p>Sold as-is, one piece per variant. Once a number sells, it's gone for good.</p>
+        <p>Siapa cepat dia dapat, tidak restock.</p>
       </div>
 
       <div class="variant-head">
-        <span class="variant-label">Variant — <span id="selLabel">choose a stone</span></span>
-        <span class="variant-hint" id="stockCount">50 available</span>
+        <span class="variant-label">Varian — <span id="selLabel">pilih satu atau lebih</span></span>
+        <span class="variant-hint" id="stockCount">50 tersedia</span>
       </div>
 
       <div class="variant-grid" id="variantGrid"></div>
 
-      <div class="stock-note">Currently viewing <strong id="viewingLabel">—</strong>. Sold pieces are shown crossed out.</div>
 
-      <div class="purchase-row">
-        <div class="qty">
-          <button type="button" id="qtyMinus" aria-label="Decrease quantity">–</button>
-          <span id="qtyVal">1</span>
-          <button type="button" id="qtyPlus" aria-label="Increase quantity">+</button>
-        </div>
-      </div>
-      <p class="stock-note" style="margin-top:-6px;">Tap a variant above to check out with that stone.</p>
-
-      <dl class="meta-list">
-        <div><dt>Material</dt><dd>Raw mineral, brass setting</dd></div>
-        <div><dt>Origin</dt><dd>Sourced in small batches</dd></div>
-        <div><dt>Shipping</dt><dd>3–6 business days</dd></div>
-        <div><dt>Returns</dt><dd>Final sale — no returns</dd></div>
-      </dl>
+      <p class="stock-note" style="margin-top:14px;">Mineral asli, bergaransi.</p>
     </div>
   </div>
 </main>
 
 <footer>
   <span>© 2026 Minerals &amp; Co. Jewelery</span>
-  <span>Clearance listing · A1–A50</span>
 </footer>
+
+<!-- Sticky cart bar -->
+<div class="cart-bar" id="cartBar">
+  <div class="cart-bar-inner">
+    <div class="cart-bar-info">
+      <strong id="cartCount">0 dipilih</strong>
+      <div class="sub" id="cartSubtotal">Rp 0</div>
+    </div>
+    <button type="button" class="cart-bar-btn" id="openCheckoutBtn">Checkout</button>
+  </div>
+</div>
 
 <!-- Checkout overlay -->
 <div class="checkout-veil" id="veil"></div>
 <div class="checkout-panel" id="panel">
   <div class="co-head">
     <h2>Checkout</h2>
-    <button class="co-close" id="closeBtn" aria-label="Close checkout">×</button>
+    <button class="co-close" id="closeBtn" aria-label="Tutup checkout">×</button>
   </div>
   <div class="co-body" id="coBody">
-    <!-- Order summary -->
-    <div class="co-order">
-      <div class="swatch"><div class="stone-dot" id="coSwatch"></div></div>
-      <div class="co-order-info">
-        <div class="name">Single Listing — Clearance Collection</div>
-        <div class="sub">Variant <span id="coVariant">—</span> · Qty <span id="coQty">1</span></div>
-      </div>
-      <div class="co-order-price" id="coLinePrice">$48</div>
-    </div>
-
-    <div class="co-totals">
-      <div><span>Subtotal</span><span id="totSub">$48.00</span></div>
-      <div><span>Shipping</span><span id="totShip">$6.00</span></div>
-      <div class="grand"><span>Total</span><span id="totGrand">$54.00</span></div>
-    </div>
-
-    <form id="checkoutForm">
-      <fieldset>
-        <legend>Contact</legend>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" required placeholder="you@example.com">
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Shipping address</legend>
-        <div class="field">
-          <label for="fullname">Full name</label>
-          <input type="text" id="fullname" required placeholder="Jane Doe">
-        </div>
-        <div class="field">
-          <label for="address">Address</label>
-          <input type="text" id="address" required placeholder="Street and number">
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="city">City</label>
-            <input type="text" id="city" required>
-          </div>
-          <div class="field">
-            <label for="zip">Postal code</label>
-            <input type="text" id="zip" required>
-          </div>
-        </div>
-        <div class="field">
-          <label for="country">Country</label>
-          <select id="country" required>
-            <option value="">Select country</option>
-            <option>Indonesia</option>
-            <option>United States</option>
-            <option>United Kingdom</option>
-            <option>Australia</option>
-            <option>Singapore</option>
-            <option>Other</option>
-          </select>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Payment</legend>
-        <div class="field">
-          <label for="cardnum">Card number</label>
-          <input type="text" id="cardnum" required placeholder="0000 0000 0000 0000" maxlength="19">
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="expiry">Expiry</label>
-            <input type="text" id="expiry" required placeholder="MM/YY" maxlength="5">
-          </div>
-          <div class="field">
-            <label for="cvc">CVC</label>
-            <input type="text" id="cvc" required placeholder="000" maxlength="4">
-          </div>
-        </div>
-      </fieldset>
-
-      <button type="submit" class="co-submit">Pay $54.00</button>
-      <div class="co-secure">This is a design demo — no payment is processed.</div>
-    </form>
+    <!-- filled by JS -->
   </div>
 </div>
 
@@ -559,7 +492,9 @@
   var total = 50;
   var soldSet = new Set([3,7,12,19,24,31,38,44,47]); // pre-sold for realism
   var grid = document.getElementById('variantGrid');
-  var selected = null;
+  var cart = []; // array of variant numbers
+
+  var unitPrice = 750000;
 
   function stoneGradient(i){
     var pair = baseStones[i % baseStones.length];
@@ -567,13 +502,19 @@
     return 'linear-gradient(' + angle + 'deg,' + pair[0] + ',' + pair[1] + ')';
   }
 
+  function formatIDR(n){
+    return 'Rp ' + n.toLocaleString('id-ID');
+  }
+
+  var chips = {};
+
   for (var i = 1; i <= total; i++){
     (function(i){
       var chip = document.createElement('button');
       chip.type = 'button';
       chip.className = 'chip' + (soldSet.has(i) ? ' sold' : '');
       chip.setAttribute('data-num', i);
-      chip.setAttribute('aria-label', 'Variant A' + i + (soldSet.has(i) ? ' (sold)' : ''));
+      chip.setAttribute('aria-label', 'Varian A' + i + (soldSet.has(i) ? ' (terjual)' : ''));
       if (soldSet.has(i)) chip.disabled = true;
 
       var dot = document.createElement('div');
@@ -588,53 +529,127 @@
 
       chip.addEventListener('click', function(){
         if (soldSet.has(i)) return;
-        if (selected) selected.classList.remove('selected');
-        selected = chip;
-        chip.classList.add('selected');
-        document.getElementById('selLabel').textContent = 'A' + i + ' selected';
-        document.getElementById('viewingLabel').textContent = 'A' + i;
-
-        openCheckout(i);
+        toggleCartItem(i);
       });
 
+      chips[i] = chip;
       grid.appendChild(chip);
     })(i);
   }
 
-  document.getElementById('stockCount').textContent = (total - soldSet.size) + ' available';
+  document.getElementById('stockCount').textContent = (total - soldSet.size) + ' tersedia';
 
-  // ---- Quantity ----
-  var qty = 1;
-  var qtyVal = document.getElementById('qtyVal');
-  document.getElementById('qtyMinus').addEventListener('click', function(){
-    if (qty > 1){ qty--; qtyVal.textContent = qty; }
-  });
-  document.getElementById('qtyPlus').addEventListener('click', function(){
-    if (qty < 3){ qty++; qtyVal.textContent = qty; }
-  });
+  function toggleCartItem(i){
+    var idx = cart.indexOf(i);
+    if (idx === -1){
+      cart.push(i);
+      chips[i].classList.add('selected');
+    } else {
+      cart.splice(idx, 1);
+      chips[i].classList.remove('selected');
+    }
+    updateCartBar();
+    if (panel.classList.contains('open')) renderCheckout();
+  }
+
+  function updateCartBar(){
+    var count = cart.length;
+    var sub = count * unitPrice;
+    document.getElementById('cartCount').textContent = count + (count === 1 ? ' varian dipilih' : ' varian dipilih');
+    document.getElementById('cartSubtotal').textContent = formatIDR(sub);
+    document.getElementById('selLabel').textContent = count > 0 ? (count + ' dipilih') : 'pilih satu atau lebih';
+    var bar = document.getElementById('cartBar');
+    if (count > 0){ bar.classList.add('show'); } else { bar.classList.remove('show'); closePanel(); }
+  }
 
   // ---- Checkout panel ----
   var veil = document.getElementById('veil');
   var panel = document.getElementById('panel');
-  var unitPrice = 48;
+  var coBody = document.getElementById('coBody');
 
-  function openCheckout(num){
-    document.getElementById('coVariant').textContent = 'A' + num;
-    document.getElementById('coQty').textContent = qty;
-    document.getElementById('coSwatch').style.background = stoneGradient(parseInt(num,10));
-    var sub = unitPrice * qty;
-    var ship = 6;
-    var grand = sub + ship;
-    document.getElementById('coLinePrice').textContent = '$' + sub.toFixed(2).replace('.00','');
-    document.getElementById('totSub').textContent = '$' + sub.toFixed(2);
-    document.getElementById('totShip').textContent = '$' + ship.toFixed(2);
-    document.getElementById('totGrand').textContent = '$' + grand.toFixed(2);
-    document.querySelector('.co-submit').textContent = 'Pay $' + grand.toFixed(2);
+  function renderCheckout(){
+    if (cart.length === 0){
+      coBody.innerHTML = '<div class="co-empty">Belum ada varian yang dipilih.</div>';
+      return;
+    }
 
+    var itemsHtml = cart.map(function(num){
+      return '' +
+        '<div class="co-item" data-num="' + num + '">' +
+          '<div class="swatch"><div class="stone-dot" style="background:' + stoneGradient(num) + '"></div></div>' +
+          '<div class="co-item-info"><div class="name">Cuci Gudang — Varian A' + num + '</div></div>' +
+          '<div class="co-item-price">' + formatIDR(unitPrice) + '</div>' +
+          '<button type="button" class="co-item-remove" data-remove="' + num + '" aria-label="Hapus A' + num + '">×</button>' +
+        '</div>';
+    }).join('');
+
+    var sub = cart.length * unitPrice;
+    var grand = sub;
+
+    coBody.innerHTML =
+      '<div class="co-items">' + itemsHtml + '</div>' +
+      '<div class="co-totals">' +
+        '<div><span>Subtotal (' + cart.length + ' pcs)</span><span>' + formatIDR(sub) + '</span></div>' +
+        '<div class="grand"><span>Total</span><span>' + formatIDR(grand) + '</span></div>' +
+      '</div>' +
+      '<form id="checkoutForm">' +
+        '<fieldset>' +
+          '<legend>Kontak</legend>' +
+          '<div class="field"><label for="email">Email</label><input type="email" id="email" required placeholder="kamu@contoh.com"></div>' +
+        '</fieldset>' +
+        '<fieldset>' +
+          '<legend>Alamat pengiriman</legend>' +
+          '<div class="field"><label for="fullname">Nama lengkap</label><input type="text" id="fullname" required placeholder="Nama Anda"></div>' +
+          '<div class="field"><label for="address">Alamat</label><input type="text" id="address" required placeholder="Nama jalan dan nomor"></div>' +
+          '<div class="field-row">' +
+            '<div class="field"><label for="city">Kota</label><input type="text" id="city" required></div>' +
+            '<div class="field"><label for="zip">Kode pos</label><input type="text" id="zip" required></div>' +
+          '</div>' +
+        '</fieldset>' +
+        '<fieldset>' +
+          '<legend>Pembayaran</legend>' +
+          '<div class="field"><label for="cardnum">Nomor kartu</label><input type="text" id="cardnum" required placeholder="0000 0000 0000 0000" maxlength="19"></div>' +
+          '<div class="field-row">' +
+            '<div class="field"><label for="expiry">Kedaluwarsa</label><input type="text" id="expiry" required placeholder="BB/TT" maxlength="5"></div>' +
+            '<div class="field"><label for="cvc">CVC</label><input type="text" id="cvc" required placeholder="000" maxlength="4"></div>' +
+          '</div>' +
+        '</fieldset>' +
+        '<button type="submit" class="co-submit">Bayar ' + formatIDR(grand) + '</button>' +
+        '<div class="co-secure">Ini demo desain — tidak ada pembayaran yang diproses.</div>' +
+      '</form>';
+
+    coBody.querySelectorAll('[data-remove]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        toggleCartItem(parseInt(btn.getAttribute('data-remove'), 10));
+      });
+    });
+
+    var form = document.getElementById('checkoutForm');
+    if (form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var orderNum = 'MC-' + Math.floor(100000 + Math.random()*899999);
+        var variantList = cart.map(function(n){ return 'A' + n; }).join(', ');
+        coBody.innerHTML =
+          '<div class="co-confirm">' +
+            '<div class="mark">&#10003;</div>' +
+            '<h2>Pesanan dikonfirmasi</h2>' +
+            '<p>' + cart.length + ' pieces kamu (varian ' + variantList + ') sedang dikemas untuk dikirim. Konfirmasi telah dikirim ke email kamu.</p>' +
+            '<div class="order-num">Pesanan <strong>' + orderNum + '</strong></div>' +
+          '</div>';
+        cart.forEach(function(n){ if (chips[n]) chips[n].classList.remove('selected'); });
+        cart = [];
+        updateCartBar();
+      });
+    }
+  }
+
+  document.getElementById('openCheckoutBtn').addEventListener('click', function(){
+    renderCheckout();
     veil.classList.add('open');
     panel.classList.add('open');
     document.body.style.overflow = 'hidden';
-  }
+  });
 
   function closePanel(){
     veil.classList.remove('open');
@@ -645,20 +660,6 @@
   veil.addEventListener('click', closePanel);
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape') closePanel();
-  });
-
-  // ---- Form submit -> confirmation ----
-  document.getElementById('checkoutForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    var num = selected ? selected.getAttribute('data-num') : '—';
-    var orderNum = 'MC-' + Math.floor(100000 + Math.random()*899999);
-    document.getElementById('coBody').innerHTML =
-      '<div class="co-confirm">' +
-        '<div class="mark">&#10003;</div>' +
-        '<h2>Order confirmed</h2>' +
-        '<p>Your piece, variant A' + num + ', is being wrapped for shipping. A confirmation has been sent to your email.</p>' +
-        '<div class="order-num">Order <strong>' + orderNum + '</strong></div>' +
-      '</div>';
   });
 })();
 </script>
