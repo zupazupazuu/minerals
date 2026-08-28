@@ -133,12 +133,9 @@
 
   .variant-grid{
     display:grid;
-    grid-template-columns:repeat(10, 1fr);
+    grid-template-columns:repeat(5, 1fr);
     gap:6px;
     margin-bottom:8px;
-  }
-  @media (max-width:540px){
-    .variant-grid{ grid-template-columns:repeat(7, 1fr); }
   }
 
   .chip{
@@ -424,24 +421,20 @@
     <div class="info">
       <h1>Cuci Gudang</h1>
 
-      <div class="price-row">
-        <span class="price">Rp 750.000</span>
-        <span class="price-note">/ pcs</span>
-      </div>
 
       <div class="desc">
         <p>Siapa cepat dia dapat, tidak restock.</p>
       </div>
 
       <div class="variant-head">
-        <span class="variant-label">Varian — <span id="selLabel">pilih satu atau lebih</span></span>
+        <span class="variant-label"><span id="selLabel">checkout disini</span></span>
         <span class="variant-hint" id="stockCount">50 tersedia</span>
       </div>
 
       <div class="variant-grid" id="variantGrid"></div>
 
 
-      <p class="stock-note" style="margin-top:14px;">Mineral asli, bergaransi.</p>
+      <p class="stock-note" style="margin-top:14px;">Mineral asli, bergaransi.<br>Semua ongkos kirim ditanggung oleh pembeli saat sampai ke tempat.<br>Complain dan bertanya? DM instagram <a href="https://www.instagram.com/minerals.co.id?igsi=dmc4dWNyeHpoNnVw" target="_blank" rel="noopener" style="color:var(--ink); text-decoration:underline;">minerals.co.id</a></p>
     </div>
   </div>
 </main>
@@ -475,31 +468,19 @@
 
 <script>
 (function(){
-  // ---- Stone palette: curated mineral tones, cycling with slight variation ----
-  var baseStones = [
-    ['#e7e2d8','#c9c0ab'], // quartz
-    ['#5b5750','#302d29'], // smoky
-    ['#e6c9c9','#c99a9a'], // rose quartz
-    ['#a692c4','#6c5590'], // amethyst
-    ['#d9b45f','#a8822f'], // citrine
-    ['#7c9b7e','#4c6a4e'], // jade
-    ['#2b2b2b','#0c0c0c'], // obsidian
-    ['#7fa9ad','#3f6c70'], // aquamarine
-    ['#c98a52','#8a5626'], // tigers eye
-    ['#b7c4d6','#8391a8']  // celestite
-  ];
-
   var total = 50;
   var soldSet = new Set([3,7,12,19,24,31,38,44,47]); // pre-sold for realism
   var grid = document.getElementById('variantGrid');
   var cart = []; // array of variant numbers
 
-  var unitPrice = 750000;
+  function variantPrice(i){
+    // deterministic pseudo-varied price per code, Rp 450.000–950.000, rounded to nearest 5.000
+    var raw = 450000 + ((i * 137) % 101) * 5000;
+    return raw;
+  }
 
   function stoneGradient(i){
-    var pair = baseStones[i % baseStones.length];
-    var angle = (i * 37) % 360;
-    return 'linear-gradient(' + angle + 'deg,' + pair[0] + ',' + pair[1] + ')';
+    return '#faf9f7';
   }
 
   function formatIDR(n){
@@ -514,7 +495,8 @@
       chip.type = 'button';
       chip.className = 'chip' + (soldSet.has(i) ? ' sold' : '');
       chip.setAttribute('data-num', i);
-      chip.setAttribute('aria-label', 'Varian A' + i + (soldSet.has(i) ? ' (terjual)' : ''));
+      chip.setAttribute('aria-label', 'Varian A' + i + (soldSet.has(i) ? ' (terjual)' : ' — ' + formatIDR(variantPrice(i))));
+      if (!soldSet.has(i)) chip.title = formatIDR(variantPrice(i));
       if (soldSet.has(i)) chip.disabled = true;
 
       var dot = document.createElement('div');
@@ -554,10 +536,10 @@
 
   function updateCartBar(){
     var count = cart.length;
-    var sub = count * unitPrice;
+    var sub = cart.reduce(function(acc, n){ return acc + variantPrice(n); }, 0);
     document.getElementById('cartCount').textContent = count + (count === 1 ? ' varian dipilih' : ' varian dipilih');
     document.getElementById('cartSubtotal').textContent = formatIDR(sub);
-    document.getElementById('selLabel').textContent = count > 0 ? (count + ' dipilih') : 'pilih satu atau lebih';
+    document.getElementById('selLabel').textContent = count > 0 ? (count + ' dipilih') : 'checkout disini';
     var bar = document.getElementById('cartBar');
     if (count > 0){ bar.classList.add('show'); } else { bar.classList.remove('show'); closePanel(); }
   }
@@ -578,12 +560,12 @@
         '<div class="co-item" data-num="' + num + '">' +
           '<div class="swatch"><div class="stone-dot" style="background:' + stoneGradient(num) + '"></div></div>' +
           '<div class="co-item-info"><div class="name">Cuci Gudang — Varian A' + num + '</div></div>' +
-          '<div class="co-item-price">' + formatIDR(unitPrice) + '</div>' +
+          '<div class="co-item-price">' + formatIDR(variantPrice(num)) + '</div>' +
           '<button type="button" class="co-item-remove" data-remove="' + num + '" aria-label="Hapus A' + num + '">×</button>' +
         '</div>';
     }).join('');
 
-    var sub = cart.length * unitPrice;
+    var sub = cart.reduce(function(acc, n){ return acc + variantPrice(n); }, 0);
     var grand = sub;
 
     coBody.innerHTML =
