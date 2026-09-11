@@ -469,7 +469,8 @@
 <script>
 (function(){
   var total = 50;
-  var soldSet = new Set([3,7,12,19,24,31,38,44,47]); // pre-sold for realism
+  // All variants marked sold => stock is 0
+  var soldSet = new Set(Array.from({length: total}, function(_, idx){ return idx + 1; }));
   var grid = document.getElementById('variantGrid');
   var cart = []; // array of variant numbers
 
